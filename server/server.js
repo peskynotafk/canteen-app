@@ -108,24 +108,35 @@ app.patch("/api/menu/:id", async (req, res) => {
   }
 });
 
-app.delete("/api/menu/:id", (req, res) => {
-  const id = Number(req.params.id);
+app.delete("/api/menu/:id", async (req, res) => {
+  console.log("DELETE ROUTE REACHED");
+  try {
+    console.log("ID received:", req.params.id);
 
-  const index = menu.findIndex(item => item.id === id);
+    const deletedItem = await Menu.findByIdAndDelete(req.params.id);
 
-  if (index === -1) {
-    return res.status(404).json({
-      message: "Menu item not found"
+    console.log("Item found:", deletedItem);
+
+    if (!deletedItem) {
+      return res.status(404).json({
+        message: "Menu item not found"
+      });
+    }
+
+    res.json({
+      message: "Item deleted successfully",
+      item: deletedItem
+    });
+  } catch (error) {
+    console.error("Menu deletion error:", error);
+
+    res.status(400).json({
+      message: "Failed to delete menu item",
+      error: error.message
     });
   }
-
-  const deletedItem = menu.splice(index, 1);
-
-  res.json({
-    message: "Item deleted successfully",
-    item: deletedItem[0]
-  });
 });
+
 
 dbConnection
  .then(() => {
