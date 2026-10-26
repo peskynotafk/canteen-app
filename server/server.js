@@ -4,9 +4,14 @@ const Menu = require("./models/Menu");
 
 const express = require("express");
 
+const authRoutes = require("./routes/auth");
+
+const { protect, staffOnly } = require("./middleware/auth");
+
 const app = express();
 
 app.use(express.json());
+app.use("/api/auth", authRoutes);
 
 const PORT = 3000;
 
@@ -67,7 +72,7 @@ app.get("/api/menu/:id", async (req, res) => {
   }
 });
 
-app.post("/api/menu", async (req, res) => {
+app.post("/api/menu", protect, staffOnly, async (req, res) => {
   try {
     const newItem = await Menu.create(req.body);
     res.status(201).json(newItem);
@@ -108,7 +113,7 @@ app.patch("/api/menu/:id", async (req, res) => {
   }
 });
 
-app.delete("/api/menu/:id", async (req, res) => {
+app.delete("/api/menu/:id", protect, staffOnly, async (req, res) => {
   console.log("DELETE ROUTE REACHED");
   try {
     console.log("ID received:", req.params.id);
