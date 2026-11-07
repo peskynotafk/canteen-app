@@ -17,7 +17,7 @@ const paymentSchema = new mongoose.Schema(
     amountPaise: {
       type: Number,
       required: true,
-      min: 0,
+      min: 1,
       validate: {
         validator: Number.isSafeInteger,
         message: "Payment amount must be a whole number of paise"
@@ -44,6 +44,14 @@ const paymentSchema = new mongoose.Schema(
     }
   },
   { timestamps: true }
+);
+
+paymentSchema.index(
+  { order: 1 },
+  {
+    unique: true,
+    partialFilterExpression: { status: "SUCCESS" }
+  }
 );
 
 const Payment = mongoose.model("Payment", paymentSchema);

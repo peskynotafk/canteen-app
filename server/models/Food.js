@@ -1,4 +1,3 @@
-
 const mongoose = require("mongoose");
 
 const foodSchema = new mongoose.Schema(
@@ -33,11 +32,14 @@ const foodSchema = new mongoose.Schema(
     isAvailable: {
       type: Boolean,
       default: true
+    },
+
+    isDeleted: {
+      type: Boolean,
+      default: false
     }
   },
-  {
-    timestamps: true
-  }
+  { timestamps: true }
 );
 
 const Food = mongoose.model("Food", foodSchema);
