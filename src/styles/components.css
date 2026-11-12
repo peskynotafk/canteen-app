@@ -1,0 +1,257 @@
+/* Reusable component styles: buttons, form fields, cards, alerts, spinner. */
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 2.9rem;
+  padding: 0.6rem 1.4rem;
+  border: 2px solid var(--forest);
+  border-radius: var(--radius-button);
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  background: var(--forest);
+  color: var(--cream);
+  box-shadow: var(--shadow-button);
+  transition:
+    transform 0.25s var(--ease),
+    box-shadow 0.25s ease,
+    background-color 0.2s ease;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-2px) rotate(-0.6deg);
+  box-shadow: 0 5px 0 var(--forest-deep);
+  background: var(--forest-deep);
+  color: var(--cream);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--forest-deep);
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Honey: the friendly "do this" button. Forest text on honey is 5:1. */
+.btn--honey {
+  background: var(--honey);
+  color: var(--forest);
+  box-shadow: 0 3px 0 var(--forest);
+}
+.btn--honey:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--honey) 86%, white);
+  color: var(--forest);
+  box-shadow: 0 5px 0 var(--forest);
+}
+.btn--honey:active:not(:disabled) {
+  box-shadow: 0 1px 0 var(--forest);
+}
+
+/* Outline: quieter, for secondary actions. */
+.btn--outline {
+  background: transparent;
+  color: var(--forest);
+  box-shadow: none;
+}
+.btn--outline:hover:not(:disabled) {
+  background: var(--moss-soft);
+  color: var(--forest);
+  box-shadow: none;
+}
+
+/* Danger: for destructive actions such as delete or reject. */
+.btn--danger {
+  background: var(--berry);
+  border-color: var(--berry);
+  color: var(--paper);
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--berry) 60%, black);
+}
+.btn--danger:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--berry) 88%, black);
+  color: var(--paper);
+}
+
+.btn--small {
+  min-height: 2.3rem;
+  padding: 0.35rem 1rem;
+  font-size: 0.92rem;
+}
+
+.btn--block {
+  width: 100%;
+}
+
+/* ---------- Form fields ---------- */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-bottom: var(--space-4);
+}
+
+.field__label {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.field__control {
+  width: 100%;
+  min-height: 2.9rem;
+  padding: 0.65rem 1rem;
+  background: var(--paper);
+  border: 2px solid var(--line-strong);
+  border-radius: var(--radius-field);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.field__control::placeholder {
+  color: color-mix(in srgb, var(--forest) 55%, var(--paper));
+}
+
+.field__control:hover {
+  border-color: var(--forest);
+}
+
+.field__control:focus {
+  outline: none;
+  border-color: var(--forest);
+  box-shadow: 0 0 0 4px var(--honey);
+}
+
+.field--invalid .field__control {
+  border-color: var(--berry);
+}
+
+.field__hint {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.field__error {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--berry);
+}
+
+/* ---------- Cards ---------- */
+.card {
+  position: relative;
+  padding: var(--space-5);
+  background: var(--surface);
+  border: 2px solid var(--forest);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+}
+
+.card--alt {
+  border-radius: var(--radius-card-alt);
+}
+
+.card--interactive {
+  transition:
+    transform 0.3s var(--ease),
+    box-shadow 0.3s ease;
+}
+
+.card--interactive:hover {
+  transform: translateY(-4px) rotate(-0.5deg);
+  box-shadow: var(--shadow-lift);
+}
+
+/* ---------- Alerts ---------- */
+.alert {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  margin-bottom: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border: 2px solid var(--forest);
+  border-radius: var(--radius-field);
+  background: var(--moss-soft);
+  font-size: 0.98rem;
+  font-weight: 600;
+}
+
+.alert__icon {
+  flex: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-top: 0.1rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--forest);
+  color: var(--cream);
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.alert--error {
+  border-color: var(--berry);
+  background: var(--berry-soft);
+}
+.alert--error .alert__icon {
+  background: var(--berry);
+}
+
+.alert--info {
+  background: var(--honey-soft);
+}
+.alert--info .alert__icon {
+  background: var(--forest);
+}
+
+/* ---------- Spinner: a small leaf that turns ---------- */
+.spinner {
+  display: inline-block;
+  width: 1.2em;
+  height: 1.2em;
+  animation: spinner-turn 1.1s linear infinite;
+}
+
+@keyframes spinner-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Gentle motion for illustrations ---------- */
+.sway {
+  transform-origin: 50% 100%;
+  animation: sway 7s ease-in-out infinite;
+}
+
+@keyframes sway {
+  0%,
+  100% {
+    transform: rotate(-2deg);
+  }
+  50% {
+    transform: rotate(2.5deg);
+  }
+}
+
+.float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}

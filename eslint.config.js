@@ -5,7 +5,9 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  // The backend (server/) is CommonJS for Node, so the browser rules below
+  // do not apply to it. Postman folders hold generated JSON/YAML only.
+  globalIgnores(['dist', 'server', 'postman', '.postman']),
   {
     files: ['**/*.{js,jsx}'],
     extends: [

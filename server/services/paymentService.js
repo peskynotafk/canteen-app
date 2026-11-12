@@ -73,6 +73,16 @@ async function getMyPayments(userId) {
     .sort({ createdAt: -1 });
 }
 
+// Staff view: every payment, newest first.
+// The user populate selects only name and email, so the password hash
+// and role never leave the database.
+async function getAllPayments() {
+  return await Payment.find()
+    .populate("order", "orderNumber totalPaise status")
+    .populate("user", "name email")
+    .sort({ createdAt: -1 });
+}
+
 async function getPaymentById(paymentId) {
   return await Payment.findById(paymentId)
     .populate("order", "orderNumber totalPaise status")
@@ -82,5 +92,6 @@ async function getPaymentById(paymentId) {
 module.exports = {
   simulatePayment,
   getMyPayments,
+  getAllPayments,
   getPaymentById
 };

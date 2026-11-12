@@ -1,67 +1,85 @@
-import { createContext, useContext, useState } from 'react'
-import { apiRequest } from '../services/api'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { AuthContext } from './authStore'
+import { setUnauthorizedHandler } from '../services/api'
+import { loginRequest, registerRequest } from '../services/authApi'
+import { EMPTY_SESSION, clearSession, readSession, saveSession } from '../services/session'
+import { getTokenExpiry } from '../utils/token'
 
-const AuthContext = createContext(null)
+// setTimeout stores its delay in a 32-bit number. Larger delays overflow
+// and fire immediately, so we never schedule beyond this.
+const MAX_TIMEOUT_MS = 2 ** 31 - 1
 
 export function AuthProvider({ children }) {
-  const [token, setToken] = useState(() => localStorage.getItem('token'))
-  const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem('user')
-    return savedUser ? JSON.parse(savedUser) : null
-  })
+  // Token and user always change together, so they live in one state value.
+  const [session, setSession] = useState(readSession)
+  const [notice, setNotice] = useState('')
 
-  async function login(email, password) {
-    const data = await apiRequest('/auth/login', {
-      method: 'POST',
-      body: JSON.stringify({ email, password }),
-    })
+  const { token, user } = session
 
-    localStorage.setItem('token', data.token)
-    localStorage.setItem('user', JSON.stringify(data.user))
+  const logout = useCallback(() => {
+    clearSession()
+    setSession(EMPTY_SESSION)
+  }, [])
 
-    setToken(data.token)
-    setUser(data.user)
+  // Used when the session ends without the person asking for it.
+  const expireSession = useCallback(() => {
+    clearSession()
+    setSession(EMPTY_SESSION)
+    setNotice('Your session has ended. Please sign in again.')
+  }, [])
+
+  // Any protected request answered with 401 signs the person out.
+  useEffect(() => {
+    setUnauthorizedHandler(expireSession)
+    return () => setUnauthorizedHandler(null)
+  }, [expireSession])
+
+  // Sign out at the moment the token expires, even if the person is just
+  // reading the page and has not made a request.
+  useEffect(() => {
+    if (!token) return undefined
+
+    const expiresAt = getTokenExpiry(token)
+    if (expiresAt === null) return undefined
+
+    const delay = Math.max(expiresAt - Date.now(), 0)
+    if (delay > MAX_TIMEOUT_MS) return undefined
+
+    const timerId = setTimeout(expireSession, delay)
+    return () => clearTimeout(timerId)
+  }, [token, expireSession])
+
+  const login = useCallback(async (email, password) => {
+    const data = await loginRequest(email, password)
+
+    saveSession(data.token, data.user)
+    setSession({ token: data.token, user: data.user })
+    setNotice('')
 
     return data.user
-  }
+  }, [])
 
-  async function signup(name, email, password) {
-    return apiRequest('/auth/register', {
-      method: 'POST',
-      body: JSON.stringify({ name, email, password }),
-    })
-  }
+  // Registering does not sign the person in: the backend returns only the
+  // new user, with no token, so the next step is the login screen.
+  const signup = useCallback((name, email, password) => {
+    return registerRequest(name, email, password)
+  }, [])
 
-  function logout() {
-    localStorage.removeItem('token')
-    localStorage.removeItem('user')
+  const clearNotice = useCallback(() => setNotice(''), [])
 
-    setToken(null)
-    setUser(null)
-  }
-
-  const value = {
-    token,
-    user,
-    isAuthenticated: Boolean(token && user),
-    login,
-    signup,
-    logout,
-  }
-
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
+  const value = useMemo(
+    () => ({
+      token,
+      user,
+      isAuthenticated: Boolean(token && user),
+      notice,
+      login,
+      signup,
+      logout,
+      clearNotice,
+    }),
+    [token, user, notice, login, signup, logout, clearNotice],
   )
-}
 
-export function useAuth() {
-  const context = useContext(AuthContext)
-
-  if (!context) {
-    throw new Error('useAuth must be used inside AuthProvider')
-  }
-
-  return context
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

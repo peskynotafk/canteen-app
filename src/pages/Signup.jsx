@@ -1,6 +1,10 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import Alert from '../components/common/Alert'
+import Button from '../components/common/Button'
+import FormField from '../components/common/FormField'
+import AuthLayout from '../components/layout/AuthLayout'
+import { useAuth } from '../hooks/useAuth'
 
 function Signup() {
   const { signup } = useAuth()
@@ -18,64 +22,65 @@ function Signup() {
     setLoading(true)
 
     try {
-      await signup(name.trim(), email.trim(), password)
+      await signup(name, email, password)
+      // The login screen shows this message above the form.
       navigate('/login', {
-        state: { message: 'Registration successful. Please log in.' },
+        replace: true,
+        state: { message: 'Registration successful. Please sign in.' },
       })
-    } catch (error) {
-      setError(error.message)
-    } finally {
+    } catch (err) {
+      setError(err.message)
       setLoading(false)
     }
   }
 
   return (
-    <main className="auth-page">
-      <form className="auth-card" onSubmit={handleSubmit}>
-        <h1>Create account</h1>
-        <p>Register as a student to order food.</p>
+    <AuthLayout
+      eyebrow="Pull up a chair"
+      title="Create your account"
+      intro="Register as a student to order from the canteen."
+      footer={
+        <>
+          Already have an account? <Link to="/login">Sign in</Link>
+        </>
+      }
+    >
+      <Alert variant="error">{error}</Alert>
 
-        {error && <p className="error-message">{error}</p>}
-
-        <label htmlFor="name">Full name</label>
-        <input
-          id="name"
+      <form onSubmit={handleSubmit}>
+        <FormField
+          label="Full name"
           type="text"
+          autoComplete="name"
           value={name}
           onChange={(event) => setName(event.target.value)}
-          placeholder="Enter your name"
+          placeholder="Your name"
           required
         />
-
-        <label htmlFor="email">Email</label>
-        <input
-          id="email"
+        <FormField
+          label="Email"
           type="email"
+          autoComplete="email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
-          placeholder="Enter your email"
+          placeholder="you@example.com"
           required
         />
-
-        <label htmlFor="password">Password</label>
-        <input
-          id="password"
+        <FormField
+          label="Password"
           type="password"
+          autoComplete="new-password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
-          placeholder="Create a password"
+          placeholder="Choose a password"
           required
         />
 
-        <button type="submit" disabled={loading}>
-          {loading ? 'Creating account...' : 'Sign up'}
-        </button>
-
-        <p className="auth-switch">
-          Already registered? <Link to="/login">Login</Link>
-        </p>
+        <Button type="submit" variant="honey" block loading={loading}>
+          {loading ? 'Creating account…' : 'Create account'}
+        </Button>
       </form>
-    </main>
+    </AuthLayout>
   )
 }
 

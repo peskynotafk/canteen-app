@@ -1,0 +1,291 @@
+/* Layout: app shell, navbar, footer, auth screen, and page containers. */
+
+.page {
+  width: min(var(--content-width), 100% - 2rem);
+  margin-inline: auto;
+  padding-block: var(--space-6) var(--space-7);
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-main {
+  flex: 1;
+}
+
+/* ---------- Badges ---------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.75rem;
+  border: 1.5px solid var(--forest);
+  border-radius: var(--radius-pill);
+  background: var(--honey);
+  color: var(--forest);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.badge--moss {
+  background: var(--moss);
+}
+
+/* ---------- Navbar ---------- */
+.navbar {
+  position: relative;
+  z-index: 10;
+  margin-bottom: 8px;
+  background: var(--paper);
+  border-bottom: 2px solid var(--forest);
+}
+
+/* A second, dotted rule under the header, like the edge of a cookbook page */
+.navbar::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -8px;
+  border-top: 2px dotted var(--sage);
+}
+
+.navbar__inner {
+  width: min(var(--content-width), 100% - 2rem);
+  margin-inline: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-5);
+  padding-block: var(--space-3);
+}
+
+.navbar__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.navbar__link {
+  display: inline-block;
+  padding: 0.35rem 0.95rem;
+  border-radius: var(--radius-pill);
+  color: var(--forest);
+  font-weight: 700;
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    transform 0.25s var(--ease);
+}
+
+.navbar__link:hover {
+  background: var(--moss-soft);
+  transform: translateY(-1px);
+}
+
+.navbar__link.active {
+  background: var(--moss);
+}
+
+.navbar__user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-left: auto;
+}
+
+.navbar__name {
+  max-width: 12rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 700;
+}
+
+/* ---------- Brand logo ---------- */
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--forest);
+  text-decoration: none;
+}
+
+.logo:hover {
+  color: var(--forest);
+}
+
+.logo__mark {
+  width: 2.4rem;
+  height: 2.4rem;
+  flex: none;
+  transition: transform 0.4s var(--ease);
+}
+
+.logo:hover .logo__mark {
+  transform: rotate(-12deg) scale(1.06);
+}
+
+.logo__name {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+/* ---------- Footer ---------- */
+.app-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-4);
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+
+.app-footer svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+/* ---------- Auth screen ---------- */
+.auth-layout {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 900px) {
+  .auth-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  }
+}
+
+.auth-aside {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--space-5) var(--space-5) var(--space-4);
+  background:
+    radial-gradient(circle at 20% 15%, var(--cream) 0 6%, transparent 6.5%),
+    radial-gradient(circle at 85% 80%, var(--cream) 0 4%, transparent 4.5%), var(--moss);
+  border-bottom: 2px solid var(--forest);
+  text-align: center;
+}
+
+@media (min-width: 900px) {
+  .auth-aside {
+    padding: var(--space-7);
+    border-bottom: 0;
+    border-right: 2px solid var(--forest);
+  }
+}
+
+.auth-aside__art {
+  display: none;
+  width: min(24rem, 100%);
+  height: auto;
+}
+
+@media (min-width: 900px) {
+  .auth-aside__art {
+    display: block;
+  }
+}
+
+.auth-aside__tagline {
+  max-width: 24rem;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 550;
+  font-style: italic;
+  line-height: 1.35;
+}
+
+.auth-main {
+  display: grid;
+  place-items: center;
+  padding: var(--space-6) var(--space-4) var(--space-7);
+}
+
+.auth-card {
+  width: min(28rem, 100%);
+  padding: var(--space-6) var(--space-5) var(--space-5);
+}
+
+@media (min-width: 480px) {
+  .auth-card {
+    padding: var(--space-6) var(--space-6) var(--space-5);
+  }
+}
+
+.auth-card__vine {
+  position: absolute;
+  width: 6.5rem;
+  height: 6.5rem;
+  pointer-events: none;
+}
+
+.auth-card__vine--tl {
+  top: -0.9rem;
+  left: -0.9rem;
+}
+
+.auth-card__vine--br {
+  right: -0.9rem;
+  bottom: -0.9rem;
+  transform: scale(-1, -1);
+}
+
+.auth-card__title {
+  margin-bottom: var(--space-2);
+}
+
+.auth-card__intro {
+  margin-bottom: var(--space-5);
+  color: var(--text-muted);
+}
+
+.auth-card__switch {
+  margin: var(--space-5) 0 0;
+  text-align: center;
+  font-size: 0.98rem;
+}
+
+/* ---------- Placeholder dashboards ---------- */
+.welcome {
+  display: grid;
+  gap: var(--space-5);
+  align-items: center;
+  max-width: 46rem;
+  margin-inline: auto;
+}
+
+@media (min-width: 640px) {
+  .welcome {
+    grid-template-columns: minmax(0, 11rem) minmax(0, 1fr);
+  }
+}
+
+.welcome__art {
+  width: min(11rem, 60%);
+  margin-inline: auto;
+}
+
+.welcome__badge {
+  margin-bottom: var(--space-3);
+}

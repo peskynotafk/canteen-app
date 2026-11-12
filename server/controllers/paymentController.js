@@ -46,6 +46,20 @@ async function getMyPayments(req, res, next) {
   }
 }
 
+async function getAllPayments(req, res, next) {
+  try {
+    const payments = await paymentService.getAllPayments();
+
+    res.status(200).json({
+      success: true,
+      count: payments.length,
+      data: payments
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 async function getPaymentById(req, res, next) {
   try {
     const { id } = req.params;
@@ -89,5 +103,6 @@ async function getPaymentById(req, res, next) {
 module.exports = {
   simulatePayment,
   getMyPayments,
+  getAllPayments,
   getPaymentById
 };

@@ -1,0 +1,79 @@
+/*
+  Design tokens: the single place where the botanical identity is defined.
+  Components never hard-code a colour, radius or font; they read these
+  variables, so a change here restyles the student and staff sides together.
+
+  Contrast notes (WCAG ratios, measured against cream):
+    forest   8.5:1  fine for all text
+    sage     3.6:1  decoration, borders and LARGE text only
+    sage-deep 5.4:1 fine for small text and filled buttons
+    moss     1.8:1  background fill only, with forest text on top (4.8:1)
+    honey    1.7:1  background fill only, with forest text on top (5.0:1)
+*/
+:root {
+  /* The supplied palette */
+  --forest: #244c38;
+  --sage: #638568;
+  --moss: #a9bd91;
+  --cream: #f5f0df;
+  --honey: #d6b76c;
+
+  /* Tones derived from the palette */
+  --forest-deep: #1b3a2a;
+  --sage-deep: #4d6851;
+  --paper: #faf8f1;
+  --moss-soft: color-mix(in srgb, var(--moss) 32%, var(--cream));
+  --honey-soft: color-mix(in srgb, var(--honey) 28%, var(--cream));
+  --sage-soft: color-mix(in srgb, var(--sage) 14%, var(--cream));
+
+  /* Errors need a colour the palette does not have. A muted terracotta
+     keeps the mood warm while still reading as "something is wrong". */
+  --berry: #8f3a2b;
+  --berry-soft: color-mix(in srgb, var(--berry) 9%, var(--paper));
+
+  /* Semantic names, used by components */
+  --bg: var(--cream);
+  --surface: var(--paper);
+  --text: var(--forest);
+  --text-muted: color-mix(in srgb, var(--forest) 78%, var(--cream));
+  --line: color-mix(in srgb, var(--forest) 28%, var(--cream));
+  --line-strong: var(--sage);
+  --focus: var(--forest);
+
+  /* Type */
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-body: 'Nunito', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-hand: 'Caveat', 'Segoe Print', 'Bradley Hand', cursive;
+
+  --text-sm: 0.9rem;
+  --text-base: 1.05rem;
+  --text-lg: 1.25rem;
+  --text-xl: clamp(1.6rem, 1.2rem + 1.6vw, 2.2rem);
+  --text-2xl: clamp(2rem, 1.4rem + 2.6vw, 3rem);
+
+  /* Spacing scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+
+  /* Organic shapes: radii that differ on each corner so nothing looks
+     stamped out of a rectangle tool. */
+  --radius-card: 28px 22px 30px 20px / 22px 28px 20px 30px;
+  --radius-card-alt: 22px 30px 20px 28px / 28px 20px 30px 22px;
+  --radius-button: 20px 24px 20px 26px / 24px 20px 26px 20px;
+  --radius-field: 16px 18px 16px 20px / 18px 16px 20px 16px;
+  --radius-pill: 999px;
+
+  /* Depth: a hard paper-cut shadow plus a soft ambient one */
+  --shadow-card: 3px 4px 0 var(--moss), 0 18px 32px -20px rgb(36 76 56 / 0.5);
+  --shadow-lift: 4px 6px 0 var(--moss), 0 22px 38px -20px rgb(36 76 56 / 0.55);
+  --shadow-button: 0 3px 0 var(--forest-deep);
+
+  --ease: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --content-width: 72rem;
+}
