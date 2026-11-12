@@ -14,10 +14,6 @@ app.get("/", (req, res) => {
   res.send("Canteen API is running!");
 });
 
-app.get("/", (req, res) => {
-  res.send("Canteen API is running!");
-});
-
 function notFound(req, res, next) {
   res.status(404).json({
     success: false,
